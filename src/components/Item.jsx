@@ -1,9 +1,10 @@
 import React from "react";
 import { MdEditDocument, MdDelete } from "react-icons/md";
 
-const Item = () => {
-  const desc =
-    "Lorem ipsum dolor sit, amet consectetur adipisicing elit.Reprehenderit sequi repudiandae facere aliquid nesciunt eius ea, adipisci explicabo deleniti tenetur dolore voluptatibus quibusdam fugiat doloribus nihil quo. Voluptatum, obcaecati alias.";
+const Item = ({ task }) => {
+  const { _id, title, description, date, iscompleted, isimportant, userid } =
+    task;
+  // console.log(_id, title, description, date, iscompleted, isimportant, userid);
 
   const textLengthOverCut = (text, length, lastText) => {
     if (length === "" || length === null) {
@@ -27,22 +28,28 @@ const Item = () => {
         <div className="upper">
           <h2 className="item-title text-xl font-normal mb-3 relative pb-2 flex justify-between">
             <span className="item-line w-full absolute bottom-0 left-0 h-[1px] bg-gray-500"></span>
-            코딩하기
+            {title}
             <span className="text-sm py-1 px-3 border border-gray-500 rounded-md hover:bg-gray-700 cursor-pointer">
               자세히
             </span>
           </h2>
-          <p>{textLengthOverCut(desc, 60, "...")}</p>
+          <p>{textLengthOverCut(description, 60, "...")}</p>
         </div>
         <div className="lower">
-          <p className="date text-sm mb-1">2024-11-07</p>
+          <p className="date text-sm mb-1">{date}</p>
           <div className="item-footer flex justify-between">
             <div className="item-footer-left flex gap-2">
-              <button className="item-btn bg-green-400">completed</button>
-              {/* <button className="hidden item-btn bg-cyan-500">
-                Incompleted
-              </button> */}
-              <button className="item-btn bg-red-400">Important</button>
+              {iscompleted ? (
+                <button className="item-btn bg-green-400">completed</button>
+              ) : (
+                <button className="hidden item-btn bg-cyan-500">
+                  Incompleted
+                </button>
+              )}
+
+              {isimportant && (
+                <button className="item-btn bg-red-400">Important</button>
+              )}
             </div>
             <div className="item-footer-right flex gap-4 items-center">
               <button>

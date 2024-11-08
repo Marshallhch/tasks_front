@@ -11,7 +11,7 @@ const Itempanel = ({ pageTitle }) => {
   const dispatch = useDispatch();
 
   const getTasksData = useSelector((state) => state.apis.getItemsData);
-  console.log(getTasksData);
+  // console.log(getTasksData);
 
   useEffect(() => {
     if (!userKey) return;
@@ -33,7 +33,9 @@ const Itempanel = ({ pageTitle }) => {
         <div className="panel-wraper w-full h-full">
           <PageTitle title={pageTitle} />
           <div className="items flex flex-wrap">
-            <Item />
+            {getTasksData?.map((item, idx) => (
+              <Item key={idx} task={item} />
+            ))}
             <AddItem />
           </div>
         </div>

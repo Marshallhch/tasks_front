@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { MdEditDocument, MdDelete } from "react-icons/md";
 import { useDispatch } from "react-redux";
-import { fetchDeleteItemData } from "../redux/slices/apiSlice";
+import {
+  fetchDeleteItemData,
+  fetchGetItemsData,
+} from "../redux/slices/apiSlice";
+
+import { toast } from "react-toastify";
+
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 const Item = ({ task }) => {
+  const [confirm, setConfirm] = useState(false);
   const { _id, title, description, date, iscompleted, isimportant, userid } =
     task;
   // console.log(_id, title, description, date, iscompleted, isimportant, userid);
@@ -26,22 +35,50 @@ const Item = ({ task }) => {
     return text;
   };
 
+  // custom confirm alert
+  const deleteSubmit = () => {
+    return new Promise((resolve) => {
+      confirmAlert({
+        title: "아이템 삭제 확인",
+        message: "정말 삭제하시겠습니까?",
+        buttons: [
+          {
+            label: "Yes",
+            onClick: () => {
+              setConfirm(true);
+              resolve(true);
+            },
+          },
+          {
+            label: "No",
+            onClick: () => {
+              setConfirm(false);
+              resolve(false);
+            },
+          },
+        ],
+      });
+    });
+  };
+
   // delete item
   const handleDeleteItem = async () => {
-    const confirm = window.confirm("아이템을 삭제하시겠습니까?");
+    const result = await deleteSubmit();
 
-    if (!confirm) return;
+    if (!result) return;
 
     if (!_id) {
-      alert("잘못된 사용자 접근 입니다.");
+      toast.error("잘못된 사용자 접근 입니다.");
       return;
     }
 
     try {
       // unwrap() : 비동기 함수의 await 값이 인식 안될 때 사용(ex: dispatch)
       await dispatch(fetchDeleteItemData(_id)).unwrap();
-      alert("아이템이 삭제되었습니다.");
+      toast.success("아이템이 삭제되었습니다.");
+      await dispatch(fetchGetItemsData(userid)).unwrap();
     } catch (error) {
+      toast.error("아이템 삭제에 실패했습니다.");
       console.error("Delete Item Error: " + error);
     }
   };

@@ -1,10 +1,14 @@
 import React from "react";
 import { MdEditDocument, MdDelete } from "react-icons/md";
+import { useDispatch } from "react-redux";
+import { fetchDeleteItemData } from "../redux/slices/apiSlice";
 
 const Item = ({ task }) => {
   const { _id, title, description, date, iscompleted, isimportant, userid } =
     task;
   // console.log(_id, title, description, date, iscompleted, isimportant, userid);
+
+  const dispatch = useDispatch();
 
   const textLengthOverCut = (text, length, lastText) => {
     if (length === "" || length === null) {
@@ -20,6 +24,26 @@ const Item = ({ task }) => {
     }
 
     return text;
+  };
+
+  // delete item
+  const handleDeleteItem = async () => {
+    const confirm = window.confirm("아이템을 삭제하시겠습니까?");
+
+    if (!confirm) return;
+
+    if (!_id) {
+      alert("잘못된 사용자 접근 입니다.");
+      return;
+    }
+
+    try {
+      // unwrap() : 비동기 함수의 await 값이 인식 안될 때 사용(ex: dispatch)
+      await dispatch(fetchDeleteItemData(_id)).unwrap();
+      alert("아이템이 삭제되었습니다.");
+    } catch (error) {
+      console.error("Delete Item Error: " + error);
+    }
   };
 
   return (
@@ -55,7 +79,7 @@ const Item = ({ task }) => {
               <button>
                 <MdEditDocument className="w-5 h-5" />
               </button>
-              <button>
+              <button className="delete" onClick={handleDeleteItem}>
                 <MdDelete className="w-5 h-5" />
               </button>
             </div>

@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import {
   fetchGetItemsData,
   fetchPostItemData,
+  fetchUpdateItemData,
 } from "./../redux/slices/apiSlice";
 
 const Modal = () => {
@@ -64,7 +65,7 @@ const Modal = () => {
         await dispatch(fetchPostItemData(formData)).unwrap();
         toast.success("할일이 추가되었습니다.");
       } else if (modalType === "update" && task) {
-        // await dispatch(fetchPostItemData(formData)).unwrap(); // todo: update 함수 변경
+        await dispatch(fetchUpdateItemData(formData)).unwrap();
         toast.success("할일이 수정되었습니다.");
       }
 
@@ -130,7 +131,7 @@ const Modal = () => {
     }
   }, [modalType, task, user?.sub]);
 
-  // console.log(task);
+  console.log(task);
 
   return (
     <div className="modal fixed bg-black bg-opacity-50 w-full h-full left-0 top-0 flex items-center justify-center z-50">

@@ -1,5 +1,5 @@
 // const rootPath = "http://localhost:8000";
-const rootPath = "http://54.90.161.6";
+const rootPath = "https://back.aiccdabipyeung.com";
 
 const GET_TASKS_API_URL = `${rootPath}/getTasks`;
 const DELETE_TASK_API_URL = `${rootPath}/deleteTask`;
